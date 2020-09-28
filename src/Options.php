@@ -787,6 +787,21 @@ final class Options
     }
 
     /**
+     * Gets param for HttpTransport - send events immediately or only on shutdown app
+     */
+    public function getDelaySending(): bool
+    {
+        return $this->options['delay_sending'];
+    }
+
+    public function setDelaySending(bool $value): void
+    {
+        $options = array_merge($this->options, ['delay_sending' => $value]);
+
+        $this->options = $this->resolver->resolve($options);
+    }
+
+    /**
      * Configures the options of the client.
      *
      * @param OptionsResolver $resolver The resolver for the options
@@ -829,6 +844,7 @@ final class Options
             'capture_silenced_errors' => false,
             'max_request_body_size' => 'medium',
             'class_serializers' => [],
+            'delay_sending' => true,
         ]);
 
         $resolver->setAllowedTypes('send_attempts', 'int');
@@ -859,6 +875,7 @@ final class Options
         $resolver->setAllowedTypes('capture_silenced_errors', 'bool');
         $resolver->setAllowedTypes('max_request_body_size', 'string');
         $resolver->setAllowedTypes('class_serializers', 'array');
+        $resolver->setAllowedTypes('delay_sending', 'bool');
 
         $resolver->setAllowedValues('max_request_body_size', ['none', 'small', 'medium', 'always']);
         $resolver->setAllowedValues('dsn', \Closure::fromCallable([$this, 'validateDsnOption']));

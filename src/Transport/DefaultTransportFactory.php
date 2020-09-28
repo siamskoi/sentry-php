@@ -57,7 +57,7 @@ final class DefaultTransportFactory implements TransportFactoryInterface
             $options,
             $this->httpClientFactory->create($options),
             $this->messageFactory,
-            true,
+            $options->getDelaySending(),
             false,
             $this->logger
         );
